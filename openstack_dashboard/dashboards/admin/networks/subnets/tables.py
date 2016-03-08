@@ -27,6 +27,7 @@ from openstack_dashboard import api
 from openstack_dashboard.dashboards.project.networks.subnets \
     import tables as proj_tables
 
+
 LOG = logging.getLogger(__name__)
 
 

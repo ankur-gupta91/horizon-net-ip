@@ -2,7 +2,7 @@
 <ul>
   <li>
     {% if subnet.subnet_name|length > 0 %}
-    <b>{{ subnet.subnet_name }}</b>
+    <b>{{ subnet.subnet_name }} (IPv{{subnet.ip_version}})</b>
     <br>
     {% endif %}
     {{ subnet.remaining_ips }}
