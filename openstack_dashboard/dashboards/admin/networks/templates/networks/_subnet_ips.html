@@ -1,0 +1,11 @@
+{% for subnet in subnet_ip_availability %}
+<ul>
+  <li>
+    {% if subnet.subnet_name|length > 0 %}
+    <b>{{ subnet.subnet_name }}</b>
+    <br>
+    {% endif %}
+    {{ subnet.remaining_ips }}
+  </li>
+</ul>
+{% endfor %}
