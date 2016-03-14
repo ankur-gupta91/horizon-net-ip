@@ -75,6 +75,7 @@ class IndexView(tables.DataTableView):
     def _get_ip_availability_data(self, network):
         availability = {}
         used_ips = {}
+        data = _("Unknown")
 
         try:
             if api.neutron.is_extension_supported(self.request,
@@ -82,12 +83,14 @@ class IndexView(tables.DataTableView):
                 availability = api.neutron.network_ip_availability_show(
                     self.request, network)
                 used_ips = availability.get("network_ip_availability")
+                data = used_ips.get("used_ips")
         except Exception:
             self.exception = True
-        return used_ips.get("used_ips")
+        return data
 
     def _get_subnet_availability(self, network):
         availability = {}
+        data = _("Unknown")
 
         try:
             if api.neutron.is_extension_supported(self.request,
@@ -100,10 +103,10 @@ class IndexView(tables.DataTableView):
                     remaining = int(item.get("total_ips")) \
                         - int(item.get("used_ips"))
                     item.update({"remaining_ips": remaining})
-
+                data = availability.get("network_ip_availability")
         except Exception:
             self.exception = True
-        return availability.get("network_ip_availability")
+        return data
 
     def get_data(self):
         try:
@@ -173,17 +176,6 @@ class DetailView(tables.MultiTableView):
             msg = _('Unable to list dhcp agents hosting network.')
             exceptions.handle(self.request, msg)
         return agents
-
-    def get_ip_availability_data(self):
-        availability = {}
-        try:
-            network_id = self.kwargs['network_id']
-            availability = api.neutron.network_ip_availability_show(
-                self.request, network_id)
-        except Exception:
-            msg = _('Unable to retrieve IP availability of network.')
-            exceptions.handle(self.request, msg)
-        return availability
 
     @memoized.memoized_method
     def _get_data(self):

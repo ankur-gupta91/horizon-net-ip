@@ -30,7 +30,8 @@ INDEX_URL = reverse('horizon:admin:networks:index')
 class NetworkTests(test.BaseAdminViewTests):
     @test.create_stubs({api.neutron: ('network_list',
                                       'list_dhcp_agent_hosting_networks',
-                                      'is_extension_supported'),
+                                      'network_ip_availability_show',
+                                      'is_extension_supported',),
                         api.keystone: ('tenant_list',)})
     def test_index(self):
         tenants = self.tenants.list()
@@ -38,22 +39,27 @@ class NetworkTests(test.BaseAdminViewTests):
             .AndReturn(self.networks.list())
         api.keystone.tenant_list(IsA(http.HttpRequest))\
             .AndReturn([tenants, False])
+
         for network in self.networks.list():
             api.neutron.list_dhcp_agent_hosting_networks(IsA(http.HttpRequest),
                                                          network.id)\
                 .AndReturn(self.agents.list())
+            api.neutron.network_ip_availability_show(IsA(http.HttpRequest),
+                                                     network.id)\
+                .AndReturn(self.ip_availability)
             api.neutron.is_extension_supported(
                 IsA(http.HttpRequest),
                 'dhcp_agent_scheduler').AndReturn(True)
             api.neutron.is_extension_supported(
                 IsA(http.HttpRequest),
-                'network-ip-availability').AndReturn(True)
+                'network-ip-availability').AndReturn(False)
         api.neutron.is_extension_supported(
             IsA(http.HttpRequest),
             'dhcp_agent_scheduler').AndReturn(True)
         api.neutron.is_extension_supported(
             IsA(http.HttpRequest),
-            'network-ip-availability').AndReturn(True)
+           'network-ip-availability').AndReturn(False)
+
         self.mox.ReplayAll()
 
         res = self.client.get(INDEX_URL)
@@ -612,7 +618,7 @@ class NetworkTests(test.BaseAdminViewTests):
     @test.create_stubs({api.neutron: ('network_list',
                                       'network_delete',
                                       'list_dhcp_agent_hosting_networks',
-                                      'is_extension_supported'),
+                                      'is_extension_supported',),
                         api.keystone: ('tenant_list',)})
     def test_delete_network(self):
         tenants = self.tenants.list()
@@ -626,6 +632,7 @@ class NetworkTests(test.BaseAdminViewTests):
         api.neutron.is_extension_supported(
             IsA(http.HttpRequest),
             'dhcp_agent_scheduler').AndReturn(True)
+
         api.keystone.tenant_list(IsA(http.HttpRequest))\
             .AndReturn([tenants, False])
         api.neutron.network_list(IsA(http.HttpRequest))\
