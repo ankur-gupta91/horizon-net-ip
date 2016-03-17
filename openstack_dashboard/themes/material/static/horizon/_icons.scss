@@ -8,12 +8,15 @@ $mdi-font-path: $static_url + "/horizon/lib/mdi/fonts";
 
 .fa {
   @extend .mdi;
-  font-size: $mdi-icon-size;
 }
 
 $icon-swap: (
   asterisk: 'star',
+  angle-right: 'arrow-right',
+  angle-left: 'arrow-left',
   ban: 'block-helper',
+  bars: 'menu',
+  bug: 'bug',
   caret-down: 'menu-down',
   check: 'check',
   chevron-down: 'chevron-down',
@@ -43,7 +46,9 @@ $icon-swap: (
   plus: 'plus',
   question-circle: 'help-circle',
   random: 'shuffle',
+  refresh: 'refresh',
   remove: 'close',
+  save: 'floppy',
   search: 'magnify',
   server: 'server',
   share-square-o: 'share',
@@ -65,14 +70,5 @@ $icon-swap: (
 @each $fa-icon, $mdi-icon in $icon-swap {
   .fa-#{$fa-icon} {
     @extend .mdi-#{$mdi-icon};
-  }
-}
-
-.dropdown-toggle > {
-  &.btn-lg .fa-caret-down {
-    font-size: 1.2em;
-  }
-  .fa-caret-down {
-    @include vertical-center();
   }
 }

@@ -81,8 +81,10 @@ class EditNetwork(policy.PolicyTargetMixin, tables.LinkAction):
 
 def get_subnet_availability(network):
     template_name = 'admin/networks/_subnet_ips.html'
-    context = {"subnet_ip_availability":
-               network.availability.get("subnet_ip_availability")}
+    context = {}
+    if "subnet_ip_availability" in network.availability:
+        subnet_availability = network.availability["subnet_ip_availability"]
+        context = {"subnet_ip_availability": subnet_availability}
     return template.loader.render_to_string(template_name, context)
 
 

@@ -81,10 +81,9 @@ def is_deleting(instance):
     return task_state.lower() == "deleting"
 
 
-class DeleteInstance(policy.PolicyTargetMixin, tables.BatchAction):
+class DeleteInstance(policy.PolicyTargetMixin, tables.DeleteAction):
     name = "delete"
     classes = ("btn-danger",)
-    icon = "remove"
     policy_rules = (("compute", "compute:delete"),)
     help_text = _("Deleted instances are not recoverable.")
 
@@ -1082,11 +1081,11 @@ TASK_DISPLAY_CHOICES = (
     ("reboot_started", pgettext_lazy("Task status of an Instance",
                                      u"Reboot Started")),
     ("rebooting_hard", pgettext_lazy("Task status of an Instance",
-                                     u"Rebooting Hard")),
+                                     u"Hard Rebooting")),
     ("reboot_pending_hard", pgettext_lazy("Task status of an Instance",
-                                          u"Reboot Pending Hard")),
+                                          u"Hard Reboot Pending")),
     ("reboot_started_hard", pgettext_lazy("Task status of an Instance",
-                                          u"Reboot Started Hard")),
+                                          u"Hard Reboot Started")),
     ("pausing", pgettext_lazy("Task status of an Instance", u"Pausing")),
     ("unpausing", pgettext_lazy("Task status of an Instance", u"Resuming")),
     ("suspending", pgettext_lazy("Task status of an Instance",
@@ -1199,9 +1198,9 @@ class InstancesTable(tables.DataTable):
         row_class = UpdateRow
         table_actions_menu = (StartInstance, StopInstance, SoftRebootInstance)
         launch_actions = ()
-        if getattr(settings, 'LAUNCH_INSTANCE_LEGACY_ENABLED', True):
+        if getattr(settings, 'LAUNCH_INSTANCE_LEGACY_ENABLED', False):
             launch_actions = (LaunchLink,) + launch_actions
-        if getattr(settings, 'LAUNCH_INSTANCE_NG_ENABLED', False):
+        if getattr(settings, 'LAUNCH_INSTANCE_NG_ENABLED', True):
             launch_actions = (LaunchLinkNG,) + launch_actions
         table_actions = launch_actions + (DeleteInstance,
                                           InstancesFilterAction)

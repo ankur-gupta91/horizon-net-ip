@@ -522,6 +522,59 @@ def flavor_list(request, is_public=True, get_extras=False):
     return flavors
 
 
+def update_pagination(entities, page_size, marker, sort_dir, sort_key,
+                      reversed_order):
+    has_more_data = has_prev_data = False
+    if len(entities) > page_size:
+        has_more_data = True
+        entities.pop()
+        if marker is not None:
+            has_prev_data = True
+    # first page condition when reached via prev back
+    elif reversed_order and marker is not None:
+        has_more_data = True
+    # last page condition
+    elif marker is not None:
+        has_prev_data = True
+
+    # restore the original ordering here
+    if reversed_order:
+        entities = sorted(entities, key=lambda entity:
+                          (getattr(entity, sort_key) or '').lower(),
+                          reverse=(sort_dir == 'asc'))
+
+    return entities, has_more_data, has_prev_data
+
+
+@memoized
+def flavor_list_paged(request, is_public=True, get_extras=False, marker=None,
+                      paginate=False, sort_key="name", sort_dir="desc",
+                      reversed_order=False):
+    """Get the list of available instance sizes (flavors)."""
+    has_more_data = False
+    has_prev_data = False
+
+    if paginate:
+        if reversed_order:
+            sort_dir = 'desc' if sort_dir == 'asc' else 'asc'
+        page_size = utils.get_page_size(request)
+        flavors = novaclient(request).flavors.list(is_public=is_public,
+                                                   marker=marker,
+                                                   limit=page_size + 1,
+                                                   sort_key=sort_key,
+                                                   sort_dir=sort_dir)
+        flavors, has_more_data, has_prev_data = update_pagination(
+            flavors, page_size, marker, sort_dir, sort_key, reversed_order)
+    else:
+        flavors = novaclient(request).flavors.list(is_public=is_public)
+
+    if get_extras:
+        for flavor in flavors:
+            flavor.extras = flavor_get_extras(request, flavor.id, True, flavor)
+
+    return (flavors, has_more_data, has_prev_data)
+
+
 @memoized
 def flavor_access_list(request, flavor=None):
     """Get the list of access instance sizes (flavors)."""

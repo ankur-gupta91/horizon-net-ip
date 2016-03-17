@@ -10,24 +10,24 @@
 # Ilya Alekseyev <ilyaalekseyev@acm.org>, 2015
 # Yury Sakarinen, 2014
 # Antonio Kless <antoniok.spb@gmail.com>, 2015. #zanata
-# Daisy <guoyingc@cn.ibm.com>, 2015. #zanata
 # Ilya Alekseyev <ilyaalekseyev@acm.org>, 2015. #zanata
 # OpenStack Infra <zanata@openstack.org>, 2015. #zanata
+# Daisy <guoyingc@cn.ibm.com>, 2016. #zanata
+# Fedor Tarasenko <feodor.tarasenko@gmail.com>, 2016. #zanata
 # Filatov Sergey <filatecs@gmail.com>, 2016. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-31 01:15+0000\n"
+"POT-Creation-Date: 2016-03-15 01:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-01-16 07:11+0000\n"
-"Last-Translator: Filatov Sergey <filatecs@gmail.com>\n"
+"PO-Revision-Date: 2016-02-25 09:24+0000\n"
+"Last-Translator: Fedor Tarasenko <feodor.tarasenko@gmail.com>\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
-"%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Generated-By: Babel 2.0\n"
 "X-Generator: Zanata 3.7.3\n"
 "Language-Team: Russian\n"
@@ -51,6 +51,9 @@ msgstr "%s ТБ"
 #, python-format
 msgid "%s bytes"
 msgstr "%s байт"
+
+msgid "(Modified)"
+msgstr "(Изменено)"
 
 msgid "-"
 msgstr "-"
@@ -134,6 +137,9 @@ msgstr "Использовано на текущий момент"
 msgid "Custom"
 msgstr "Выборочный"
 
+msgid "Customization Script"
+msgstr "Скрипт настройки"
+
 msgid "Danger"
 msgstr "Опасность"
 
@@ -178,7 +184,6 @@ msgid_plural "Displaying %s items"
 msgstr[0] "Отображено %s значение"
 msgstr[1] "Отображено %s значений"
 msgstr[2] "Отображено %s значений"
-msgstr[3] "Отображено %s значений"
 
 msgid "Duplicate keys are not allowed"
 msgstr "Повторяющиеся ключи не допускаются"
@@ -213,9 +218,6 @@ msgstr "ID"
 msgid "IP Addresses"
 msgstr "IP адрес"
 
-msgid "In current results"
-msgstr "В текущих результатах"
-
 msgid "Info"
 msgstr "Информация"
 
@@ -224,6 +226,9 @@ msgstr "Требуется целое число"
 
 msgid "Interfaces"
 msgstr "Интерфейсы"
+
+msgid "Load script from a file"
+msgstr "Загрузить скрипт из файла"
 
 msgid "Loading"
 msgstr "Загрузка"
@@ -248,6 +253,9 @@ msgstr "Вперёд"
 
 msgid "No"
 msgstr "Нет"
+
+msgid "No Limit"
+msgstr "Нет ограничений"
 
 msgid "No available items"
 msgstr "Нет доступных элементов"
@@ -371,6 +379,9 @@ msgstr "Всего"
 #, python-format
 msgid "Unable to delete: %s."
 msgstr "Невозможно удалить: %s."
+
+msgid "Unlimited"
+msgstr "Неограничено"
 
 msgid "View Details"
 msgstr "Просмотреть детали"

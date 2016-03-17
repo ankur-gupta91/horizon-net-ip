@@ -1617,11 +1617,11 @@ class InstanceTests(helpers.TestCase):
         else:
             self.assertNotContains(res, boot_from_image_field_label)
 
-        checked_label = '<label for="id_network_0"><input checked="checked"'
+        checked_box = '<input checked="checked" id="id_network_0"'
         if only_one_network:
-            self.assertContains(res, checked_label)
+            self.assertContains(res, checked_box)
         else:
-            self.assertNotContains(res, checked_label)
+            self.assertNotContains(res, checked_box)
 
         disk_config_field_label = 'Disk Partition'
         if disk_config:
@@ -3830,12 +3830,11 @@ class InstanceTests(helpers.TestCase):
         res = self.client.get(INDEX_URL)
 
         launch_action = self.getAndAssertTableAction(res, 'instances',
-                                                     'launch')
+                                                     'launch-ng')
 
-        self.assertEqual(set(['ajax-modal', 'ajax-update', 'btn-launch']),
+        self.assertEqual(set(['btn-launch']),
                          set(launch_action.classes))
         self.assertEqual('Launch Instance', launch_action.verbose_name)
-        self.assertEqual('horizon:project:instances:launch', launch_action.url)
         self.assertEqual((('compute', 'compute:create'),),
                          launch_action.policy_rules)
 
@@ -3878,7 +3877,7 @@ class InstanceTests(helpers.TestCase):
         res = self.client.get(INDEX_URL)
 
         launch_action = self.getAndAssertTableAction(
-            res, 'instances', 'launch')
+            res, 'instances', 'launch-ng')
 
         self.assertTrue('disabled' in launch_action.classes,
                         'The launch button should be disabled')

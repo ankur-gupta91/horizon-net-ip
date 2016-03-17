@@ -26,7 +26,6 @@ from horizon import tables
 from horizon.utils.memoized import memoized  # noqa
 
 from openstack_dashboard import api
-from openstack_dashboard.api import base
 
 NOT_LAUNCHABLE_FORMATS = ['aki', 'ari']
 
@@ -157,7 +156,7 @@ class CreateVolumeFromImage(tables.LinkAction):
 
     def allowed(self, request, image=None):
         if (image and image.container_format not in NOT_LAUNCHABLE_FORMATS
-                and base.is_service_enabled(request, 'volume')):
+                and api.cinder.is_volume_service_enabled(request)):
             return image.status == "active"
         return False
 
@@ -332,9 +331,9 @@ class ImagesTable(tables.DataTable):
         verbose_name = _("Images")
         table_actions = (OwnerFilter, CreateImage, DeleteImage,)
         launch_actions = ()
-        if getattr(settings, 'LAUNCH_INSTANCE_LEGACY_ENABLED', True):
+        if getattr(settings, 'LAUNCH_INSTANCE_LEGACY_ENABLED', False):
             launch_actions = (LaunchImage,) + launch_actions
-        if getattr(settings, 'LAUNCH_INSTANCE_NG_ENABLED', False):
+        if getattr(settings, 'LAUNCH_INSTANCE_NG_ENABLED', True):
             launch_actions = (LaunchImageNG,) + launch_actions
         row_actions = launch_actions + (CreateVolumeFromImage,
                                         EditImage, UpdateMetadata,

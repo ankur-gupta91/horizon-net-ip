@@ -1,29 +1,21 @@
-# Translations template for PROJECT.
-# Copyright (C) 2015 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-#
-# Translators:
-# Ian Y. Choi <ianyrchoi@gmail.com>, 2015
-# jaekwon.park <jaekwon.park@rockplace.co.kr>, 2014
-# Sungjin Kang <potopro@gmail.com>, 2015
 # Ian Y. Choi <ianyrchoi@gmail.com>, 2015. #zanata
 # Sungjin Kang <gang.sungjin@gmail.com>, 2015. #zanata
+# Ian Y. Choi <ianyrchoi@gmail.com>, 2016. #zanata
 # Sungjin Kang <gang.sungjin@gmail.com>, 2016. #zanata
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-01-31 01:15+0000\n"
+"POT-Creation-Date: 2016-03-15 01:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-01-23 01:49+0000\n"
-"Last-Translator: Sungjin Kang <gang.sungjin@gmail.com>\n"
-"Language: ko-KR\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"Generated-By: Babel 2.0\n"
-"X-Generator: Zanata 3.7.3\n"
+"PO-Revision-Date: 2016-03-10 02:25+0000\n"
+"Last-Translator: Ian Y. Choi <ianyrchoi@gmail.com>\n"
 "Language-Team: Korean (South Korea)\n"
+"Language: ko-KR\n"
+"X-Generator: Zanata 3.7.3\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 
 #, python-format
 msgid "%s GB"
@@ -44,6 +36,9 @@ msgstr "%s TB"
 #, python-format
 msgid "%s bytes"
 msgstr "%s 바이트"
+
+msgid "(Modified)"
+msgstr "(수정됨)"
 
 msgid "-"
 msgstr "-"
@@ -127,6 +122,9 @@ msgstr "현재 사용량"
 msgid "Custom"
 msgstr "사용자 지정"
 
+msgid "Customization Script"
+msgstr "사용자 정의 스크립트"
+
 msgid "Danger"
 msgstr "위험"
 
@@ -179,6 +177,9 @@ msgstr "Error"
 msgid "Error: "
 msgstr "오류:"
 
+msgid "Example"
+msgstr "예제"
+
 msgid "Existing Metadata"
 msgstr "기존 메타데이터"
 
@@ -197,14 +198,14 @@ msgstr "완료"
 msgid "Flavor"
 msgstr "Flavor"
 
+msgid "Full Text Search"
+msgstr "모든 텍스트 검색"
+
 msgid "ID"
 msgstr "ID"
 
 msgid "IP Addresses"
 msgstr "IP 주소"
-
-msgid "In current results"
-msgstr "현재 결과 값"
 
 msgid "Info"
 msgstr "정보"
@@ -214,6 +215,9 @@ msgstr "정수 필요"
 
 msgid "Interfaces"
 msgstr "인터페이스"
+
+msgid "Load script from a file"
+msgstr "파일에서 스크립트 읽어오기"
 
 msgid "Loading"
 msgstr "불러오는 중"
@@ -238,6 +242,9 @@ msgstr "다음"
 
 msgid "No"
 msgstr "아니오"
+
+msgid "No Limit"
+msgstr "제한 없음"
 
 msgid "No available items"
 msgstr "사용 가능한 항목 없음"
@@ -305,6 +312,17 @@ msgstr "역할"
 msgid "STATUS"
 msgstr "STATUS"
 
+#. Strings between {$ and $} should be left untranslated.
+msgid ""
+"Script size: {$ (scriptLength || 0) | bytes $} of {$ config.MAX_SCRIPT_SIZE "
+"| bytes $}"
+msgstr ""
+"스크립트 크기: {$ config.MAX_SCRIPT_SIZE | bytes $} 중 {$ (scriptLength || "
+"0) | bytes $}"
+
+msgid "Search in current results"
+msgstr "현재 결과에서 검색"
+
 msgid "Select an item from Available items below"
 msgstr "아래에 사용 가능한 항목에서 선택"
 
@@ -345,6 +363,9 @@ msgid ""
 msgstr ""
 "작업을 진행할 수 없습니다. 이 행 내용에 오류가 있거나 정보가 누락되었습니다."
 
+msgid "The script is larger than the maximum size"
+msgstr "스크립트가 최대 크기보다 큽니다"
+
 msgid "There was a problem communicating with the server, please try again."
 msgstr "서버와의 통신에 문제가 발생하였으니, 다시 시도하세요."
 
@@ -354,12 +375,18 @@ msgstr "양식을 제출하는 동안 오류가 발생하였습니다. 다시 �
 msgid "Toggle Dropdown"
 msgstr "토글 드롭다운"
 
+msgid "Toggle navigation"
+msgstr "내비게이션 토글"
+
 msgid "Total"
 msgstr "총합"
 
 #, python-format
 msgid "Unable to delete: %s."
 msgstr "삭제할 수 없습니다: %s."
+
+msgid "Unlimited"
+msgstr "제한없음"
 
 msgid "View Details"
 msgstr "세부 정보 보기"
@@ -382,6 +409,16 @@ msgstr "작업 중"
 msgid "Yes"
 msgstr "예"
 
+msgid ""
+"You can specify resource metadata by moving items from the left column to "
+"the right column. In the left column there are metadata definitions from the "
+"Glance Metadata Catalog. Use the \"Custom\" option to add metadata with "
+"the key of your choice."
+msgstr ""
+"오른쪽 열에서 왼쪽 열로 이동하여 리소스 메타 데이터를 지정할 수 있습니다. 왼"
+"쪽 열에는 Glance 메타 데이터 카탈로그로부터 메타 데이터 정의가 존재합니다. "
+"\"사용자 정의\" 옵션을 사용하여 선택한 키에 메타 데이터를 추가할 수 있습니다."
+
 #, python-format
 msgid "You have selected %s. "
 msgstr "%s를 선택하였습니다. "
@@ -401,3 +438,6 @@ msgstr "Pool 기본"
 #, python-format
 msgid "selected \"%s\""
 msgstr "\"%s\" 선택됨"
+
+msgid "{$ message || 'No items to display.' $}"
+msgstr "{$ message || '표시할 항목이 없습니다.' $}"

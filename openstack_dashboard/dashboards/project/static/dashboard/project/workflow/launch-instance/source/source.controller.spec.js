@@ -20,6 +20,7 @@
     var noop = angular.noop;
 
     beforeEach(module('horizon.dashboard.project'));
+    beforeEach(module('horizon.framework'));
 
     describe('LaunchInstanceSourceController', function() {
       var scope, ctrl, $browser, deferred;
@@ -39,6 +40,8 @@
 
       beforeEach(inject(function($controller, $rootScope, _$browser_, $q) {
         scope = $rootScope.$new();
+        spyOn(scope, '$watch').and.callThrough();
+        spyOn(scope, '$watchCollection').and.callThrough();
         $browser = _$browser_;
         deferred = $q.defer();
         scope.initPromise = deferred.promise;
@@ -47,7 +50,7 @@
           newInstanceSpec: { source: [], source_type: '' },
           images: [ { id: 'image-1' }, { id: 'image-2' } ],
           imageSnapshots: [],
-          volumes: [],
+          volumes: [ { id: 'volume-1' }, { id: 'volume-2' } ],
           volumeSnapshots: [],
           novaLimits: {
             maxTotalInstances: 10,
@@ -76,7 +79,9 @@
       it('defines the correct boot source options', function() {
         expect(ctrl.bootSourcesOptions).toBeDefined();
         var types = ['image', 'snapshot', 'volume', 'volume_snapshot'];
-        var opts = ctrl.bootSourcesOptions.map(function(x) { return x.type; });
+        var opts = ctrl.bootSourcesOptions.map(function(x) {
+          return x.type;
+        });
         types.forEach(function(key) {
           expect(opts).toContain(key);
         });
@@ -184,7 +189,28 @@
         });
       });
 
+      it('defaults source to volume-2 if launchContext.volumeId = volume-2', function() {
+        scope.launchContext = { volumeId: 'volume-2' };
+        deferred.resolve();
+
+        $browser.defer.flush();
+
+        expect(ctrl.tableData.allocated[0]).toEqual({ id: 'volume-2' });
+        expect(scope.model.newInstanceSpec.source_type.type).toBe('volume');
+        expect(ctrl.currentBootSource).toBe('volume');
+      });
+
       describe('Scope Functions', function() {
+
+        describe('watchers', function () {
+          it('establishes five watches', function() {
+            expect(scope.$watch.calls.count()).toBe(5);
+          });
+
+          it("establishes two watch collections", function () {
+            expect(scope.$watchCollection.calls.count()).toBe(2);
+          });
+        });
 
         describe('updateBootSourceSelection', function() {
           var tableKeys = ['available', 'allocated',
@@ -203,6 +229,18 @@
             expect(Object.keys(ctrl.tableData)).toEqual(tableKeys);
             expect(ctrl.tableHeadCells.length).toBeGreaterThan(0);
             expect(ctrl.tableBodyCells.length).toBeGreaterThan(0);
+          });
+
+          it('should broadcast event when boot source changes', function() {
+            spyOn(scope, '$broadcast');
+            scope.$apply();
+
+            var selSource = 'volume';
+            ctrl.updateBootSourceSelection(selSource);
+            expect(ctrl.currentBootSource).toEqual('volume');
+
+            scope.$apply();
+            expect(scope.$broadcast).toHaveBeenCalled();
           });
         });
 

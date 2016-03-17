@@ -59,9 +59,10 @@ class IndexView(tables.DataTableView):
     def _get_agents_data(self, network):
         agents = []
         data = _("Unknown")
+        supported = api.neutron.is_extension_supported(self.request,
+                                                  'dhcp_agent_scheduler')
         try:
-            if api.neutron.is_extension_supported(self.request,
-                                                  'dhcp_agent_scheduler'):
+            if supported:
                 # This method is called for each network. If agent-list cannot
                 # be retrieved, we will see many pop-ups. So the error message
                 # will be popup-ed in get_data() below.
@@ -73,35 +74,48 @@ class IndexView(tables.DataTableView):
         return data
 
     def _get_ip_availability_data(self, network):
-        availability = []
+        availability = {}
+        used_ips = {}
+        data = _("Unknown")
 
         try:
             if api.neutron.is_extension_supported(self.request,
                                                   'network-ip-availability'):
                 availability = api.neutron.network_ip_availability_show(
                     self.request, network)
+                used_ips = availability.get("network_ip_availability", {})
+                data = used_ips.get("used_ips")
+                print availability
         except Exception:
             self.exception = True
-        return availability.get("network_ip_availability").get("used_ips")
+        return data
 
-    def _get_subnet_availability(self, network):
-        availability = []
+    def _get_subnet_availability_data(self, network):
+        availability = {}
+        data = _("Unknown")
 
         try:
-            if api.neutron.is_extension_supported(self.request,
-                                                  'network-ip-availability'):
+            if api.neutron.is_extension_supported(
+                    self.request, "network-ip-availability"):
                 availability = api.neutron.network_ip_availability_show(
                     self.request, network)
-                for item in availability.get(
-                        "network_ip_availability").get(
-                        "subnet_ip_availability"):
+                availabilities = availability.get("network_ip_availability",
+                                                  {})
+                subnets = availabilities.get("subnet_ip_availability", [])
+                for item in subnets:
                     remaining = int(item.get("total_ips")) \
                         - int(item.get("used_ips"))
                     item.update({"remaining_ips": remaining})
+                data = availability.get("network_ip_availability", data)
+        except Exception as e:
+         #   print ""
+         #   print e
+         #   print ""
+         #   import sys, traceback; exc_type, exc_value, exc_traceback = sys.exc_info(); print traceback.format_exception(exc_type, exc_value, exc_traceback)
 
-        except Exception:
-            self.exception = True
-        return availability.get("network_ip_availability")
+            msg = _("Unable to retrieve subnet IP availability.")
+            exceptions.handle(self.request, msg)
+        return data
 
     def get_data(self):
         try:
@@ -113,13 +127,13 @@ class IndexView(tables.DataTableView):
         if networks:
             self.exception = False
             tenant_dict = self._get_tenant_list()
-            for n in networks:
+            for number, n in enumerate(networks):
                 # Set tenant name
                 tenant = tenant_dict.get(n.tenant_id, None)
                 n.tenant_name = getattr(tenant, 'name', None)
                 n.num_agents = self._get_agents_data(n.id)
                 n.ip_availability = self._get_ip_availability_data(n.id)
-                n.availability = self._get_subnet_availability(n.id)
+                n.availability = self._get_subnet_availability_data(n.id)
             if self.exception:
                 msg = _('Unable to list dhcp agents hosting network.')
                 exceptions.handle(self.request, msg)
@@ -172,17 +186,6 @@ class DetailView(tables.MultiTableView):
             exceptions.handle(self.request, msg)
         return agents
 
-    def get_ip_availability_data(self):
-        availability = []
-        try:
-            network_id = self.kwargs['network_id']
-            availability = api.neutron.network_ip_availability_show(
-                self.request, network_id)
-        except Exception:
-            msg = _('Unable to retrieve IP availability of network.')
-            exceptions.handle(self.request, msg)
-        return availability
-
     @memoized.memoized_method
     def _get_data(self):
         try:
@@ -206,6 +209,7 @@ class DetailView(tables.MultiTableView):
             dhcp_agent_support = api.neutron.is_extension_supported(
                 self.request, 'dhcp_agent_scheduler')
             context['dhcp_agent_support'] = dhcp_agent_support
+
         except Exception:
             context['dhcp_agent_support'] = False
 
