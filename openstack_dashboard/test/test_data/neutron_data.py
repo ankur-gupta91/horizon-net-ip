@@ -1317,7 +1317,7 @@ def data(TEST):
     TEST.api_ports.add(port_dict)
     TEST.ports.add(neutron.Port(port_dict))
 
-    availability = {"network_ip_availability": {
+    t_availability = {"network_ip_availability": {
         "id":
         "82288d84-e0a5-42ac-95be-e6af08727e42",
         "name": "net1",
@@ -1333,7 +1333,7 @@ def data(TEST):
         "total_ips": 253,
         "used_ips": 3}}
 
-    {'network_ip_availability': {
+    availability = {'network_ip_availability': {
         'used_ips': 2,
         'subnet_ip_availability': [{
             'used_ips': 1,

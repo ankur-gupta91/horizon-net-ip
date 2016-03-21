@@ -85,7 +85,6 @@ class IndexView(tables.DataTableView):
                     self.request, network)
                 used_ips = availability.get("network_ip_availability", {})
                 data = used_ips.get("used_ips")
-                print availability
         except Exception:
             self.exception = True
         return data

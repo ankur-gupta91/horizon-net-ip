@@ -110,6 +110,16 @@ class NeutronApiTests(test.APITestCase):
 
         api.neutron.network_delete(self.request, network_id)
 
+    def test_network_ip_availability(self):
+        network = {'network': self.api_networks.first()}
+
+        neutronclient = self.stub_neutronclient()
+        neutronclient.show_network_ip_availability(
+        network)
+        self.mox.ReplayAll()
+
+        api.neutron.network_ip_availability_show(self.request, network)
+
     def test_subnet_list(self):
         subnets = {'subnets': self.api_subnets.list()}
 

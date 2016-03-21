@@ -98,18 +98,13 @@ class NetworkTests(test.BaseAdminViewTests):
         api.keystone.tenant_list(IsA(http.HttpRequest))\
             .AndReturn([tenants, False])
         ip_availability = self.ip_availability.get()
-
-        print ip_availability
-
-
-
         for network in self.networks.list():
             api.neutron.list_dhcp_agent_hosting_networks(IsA(http.HttpRequest),
                                                          network.id)\
                 .AndReturn(self.agents.list())
             api.neutron.network_ip_availability_show(IsA(http.HttpRequest),
                                                      network.id)\
-                .MultipleTimes().AndRaise(self.exceptions.neutron)
+                .MultipleTimes().AndReturn(ip_availability)
             api.neutron.is_extension_supported(
                 IsA(http.HttpRequest),
                 'dhcp_agent_scheduler').AndReturn(True)
@@ -122,14 +117,14 @@ class NetworkTests(test.BaseAdminViewTests):
         api.neutron.is_extension_supported(
             IsA(http.HttpRequest),
             'network-ip-availability').MultipleTimes().AndReturn(True)
-        import pdb; pdb.set_trace()
-        self.mox.ReplayAll()
 
+        self.mox.ReplayAll()
+	
         res = self.client.get(INDEX_URL)
 
         self.assertTemplateUsed(res, 'admin/networks/index.html')
-        self.assertEqual(len(res.context['networks_table'].data), 0)
-        self.assertMessageCount(res, error=1)
+        networks = res.context['networks_table'].data
+        self.assertItemsEqual(networks, self.networks.list())
 
     @test.create_stubs({api.neutron: ('network_get',
                                       'subnet_list',
